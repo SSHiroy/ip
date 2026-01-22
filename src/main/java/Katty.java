@@ -27,16 +27,16 @@ public class Katty {
      * @throws IllegalArgumentException if the messages array is null or
      *     its length is not equal to 3.
      */
-    public static String kattyMessage(String[] messages, KattyExpression expression) {
+    public static String kattyMessage(String[] messages, KattyExpression expression) throws IllegalArgumentException {
         if (messages == null || messages.length != 3) {
             throw new IllegalArgumentException("Must provide exactly 3 messages.");
         }
 
         final String eyes = switch (expression) {
-        case HAPPY -> "^.^";
-        case THINKING -> "-.-";
-        case CONFUSED -> "?.?";
-        case NORMAL -> "o.o";
+            case HAPPY -> "^.^";
+            case THINKING -> "-.-";
+            case CONFUSED -> "?.?";
+            case NORMAL -> "o.o";
         };
 
         return String.format(
