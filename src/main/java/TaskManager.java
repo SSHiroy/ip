@@ -15,9 +15,42 @@ class TaskManager {
         this.tasks = new ArrayList<>();
     }
 
-    public String addTask(Task task) {
+    public KattyResult addTask(Task task) {
         this.tasks.add(task);
-        return "added: " + task;
+        return new KattyResult(true, "Let's get to work...", task.toString(), null);
+    }
+
+    public KattyResult markDone(int i) {
+        i = i - 1;
+        try {
+            boolean success = this.tasks.get(i).markDone();
+            if (success) {
+                return new KattyResult(success, "I've marked it as complete! Nice work!",
+                        this.tasks.get(i).toString(), null);
+            } else {
+                return new KattyResult(success, "Task is already completed!",
+                                       this.tasks.get(i).toString(), null);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            return new KattyResult(false, "That task doesn't exist!", null, e);
+        }
+    }
+
+    public KattyResult markIncomplete(int i) {
+        i = i - 1;
+        try {
+            boolean success = this.tasks.get(i).markIncomplete();
+            if (success) {
+                return new KattyResult(success,
+                        "I've marked it as incomplete. Let's hope it doesn't stay that way for long...",
+                        this.tasks.get(i).toString(), null);
+            } else {
+                return new KattyResult(success, "Task was never completed!",
+                        this.tasks.get(i).toString(), null);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            return new KattyResult(false, "That task doesn't exist!", null, e);
+        }
     }
 
     public String getFormattedTaskList() {
@@ -29,6 +62,6 @@ class TaskManager {
                 .mapToObj(i -> String.format("Task %d: %s", i + 1, this.tasks.get(i).toString()))
                 .toList();
 
-        return "\n----------\n" + String.join("\n", taskStringFormat) + "\n-----------\n";
+        return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";
     }
 }

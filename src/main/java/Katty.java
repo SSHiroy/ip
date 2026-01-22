@@ -29,7 +29,9 @@ public class Katty {
      * @throws IllegalArgumentException if the messages array is null or
      *     its length is not equal to 3.
      */
-    public static String kattyMessage(String[] messages, KattyExpression expression) throws IllegalArgumentException {
+    public static String kattyMessage(String[] messages, KattyExpression expression)
+            throws IllegalArgumentException {
+
         if (messages == null || messages.length != 3) {
             throw new IllegalArgumentException("Must provide exactly 3 messages.");
         }
@@ -49,7 +51,7 @@ public class Katty {
             messages[0] == null ? "" : messages[0],
             eyes,
             messages[1] == null ? "" : messages[1],
-            messages[2] == null ? "" : messages[2]);
+            messages[2] == null ? "" : messages[2]) + "\n";
     }
 
     /**
@@ -83,39 +85,71 @@ public class Katty {
         // User command loop
         while (true) {
             String userCommand = scanner.nextLine().strip();
+            String[] command = userCommand.split(" ", 2);
             boolean userExit = false;
 
-            switch (userCommand) {
+            switch (command[0]) {
 
-            case "":
-                System.out.println(kattyMessage(new String[]{"Meow?", "", ""},
-                                                KattyExpression.NORMAL));
-                break;
+                case "" -> System.out.println(kattyMessage(new String[]{"Meow?", "", ""}, KattyExpression.NORMAL));
 
-            case "list":
-                System.out.println(kattyMessage(new String[]{"Let me recall try to recall!", "",
-                                                             "If I remember correctly..."}, KattyExpression.THINKING));
+                case "list" -> {
+                    System.out.println(kattyMessage(new String[]{"Let me recall try to recall!", "",
+                            "If I remember correctly..."}, KattyExpression.THINKING));
 
-                String tasks = taskManager.getFormattedTaskList();
+                    String tasks = taskManager.getFormattedTaskList();
 
-                if (tasks.isBlank()) {
-                    System.out.println(Katty.kattyMessage(new String[]{"Nothing to do!", "", ""},
-                                       KattyExpression.NORMAL));
-                } else {
-                    System.out.println(tasks);
+                    if (tasks.isBlank()) {
+                        System.out.println(Katty.kattyMessage(new String[]{"Nothing to do!", "", ""},
+                                KattyExpression.NORMAL));
+                    } else {
+                        System.out.println(tasks);
+                    }
+
+                    System.out.println(Katty.kattyMessage(new String[]{"Hope that helps!", "", ""},
+                            Katty.KattyExpression.HAPPY));
                 }
 
-                System.out.println(Katty.kattyMessage(new String[]{"Hope that helps!", "", ""},
-                                   Katty.KattyExpression.HAPPY));
-                break;
+                case "mark" -> {
+                    KattyResult result;
+                    try {
+                        int i = Integer.parseInt(command[1]);
+                        result = taskManager.markDone(i);
 
-            case "bye":
-                userExit = true;
-                break;
+                    } catch (NumberFormatException e) {
+                        result = new KattyResult(false, "That's not a valid task number!",
+                                "", null);
+                    }
 
-            default:
-                String taskManagerOutput = taskManager.addTask(new Task(userCommand));
-                System.out.println(kattyMessage(new String[]{taskManagerOutput, "", ""}, KattyExpression.NORMAL));
+                    System.out.println(kattyMessage(new String[]{result.getMessage(), "",
+                                    result.isSuccess() ? result.getData() : result.getException()},
+                            result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+                }
+
+                case "unmark" -> {
+                    KattyResult result;
+                    try {
+                        int i = Integer.parseInt(command[1]);
+                        result = taskManager.markIncomplete(i);
+
+                    } catch (NumberFormatException e) {
+                        result = new KattyResult(false, "That's not a valid task number!",
+                                            "", null);
+                    }
+
+                    System.out.println(kattyMessage(new String[]{result.getMessage(), "", result.getException()},
+                            result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+                    System.out.println(result.getData());
+                }
+
+                case "bye" -> userExit = true;
+
+                default -> {
+                    KattyResult result = taskManager.addTask(new Task(userCommand));
+                    System.out.println(kattyMessage(new String[]{(result.isSuccess() ? "added: " : "could not add: ")
+                            + result.getData(), "",
+                            result.isSuccess() ? result.getMessage() : result.getException()},
+                            KattyExpression.NORMAL));
+                }
             }
 
             if (userExit) {
