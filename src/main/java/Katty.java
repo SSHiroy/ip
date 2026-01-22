@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * The main entry point for the Katty Chatbot application.
  *
@@ -39,7 +41,7 @@ public class Katty {
             case NORMAL -> "o.o";
         };
 
-        return String.format(
+        return "\n" + String.format(
             """
             /\\_/\\  | %-35s
            ( %s ) | %-35s
@@ -67,11 +69,30 @@ public class Katty {
                     |: | \\  \\   /   /  \\\\  \\     \\:  |         \\:  |      /   /
                     (__|  \\__) (___/    \\___)     \\__|          \\__|     |___/
                     """;
+
+        // Welcome message
         System.out.println("\n\nWelcome to\n" + logo + "\n");
 
+        // Katty's welcome message
         System.out.println(kattyMessage(new String[]{"Hi there! Katty's ready to help!", "", ""},
                                         KattyExpression.NORMAL));
 
+        Scanner scanner = new Scanner(System.in);
+
+        // User command loop
+        while (true) {
+            String userCommand = scanner.nextLine();
+
+            if (userCommand.equals("bye")) {
+                break;
+            }
+
+            System.out.println(kattyMessage(new String[]{userCommand, "", ""}, KattyExpression.THINKING));
+        }
+
+        scanner.close();
+
+        // Goodbye message
         System.out.println(kattyMessage(new String[]{"Always glad to help!", "", "Goodbye..."}, KattyExpression.HAPPY));
     }
 }
