@@ -78,21 +78,55 @@ public class Katty {
                                         KattyExpression.NORMAL));
 
         Scanner scanner = new Scanner(System.in);
+        TaskManager taskManager = new TaskManager();
 
         // User command loop
         while (true) {
-            String userCommand = scanner.nextLine();
+            String userCommand = scanner.nextLine().strip();
+            boolean userExit = false;
 
-            if (userCommand.equals("bye")) {
+            switch (userCommand) {
+
+            case "":
+                System.out.println(kattyMessage(new String[]{"Meow?", "", ""},
+                                                KattyExpression.NORMAL));
                 break;
+
+            case "list":
+                System.out.println(kattyMessage(new String[]{"Let me recall try to recall!", "",
+                                                             "If I remember correctly..."}, KattyExpression.THINKING));
+
+                String tasks = taskManager.getFormattedTaskList();
+
+                if (tasks.isBlank()) {
+                    System.out.println(Katty.kattyMessage(new String[]{"Nothing to do!", "", ""},
+                                       KattyExpression.NORMAL));
+                } else {
+                    System.out.println(tasks);
+                }
+
+                System.out.println(Katty.kattyMessage(new String[]{"Hope that helps!", "", ""},
+                                   Katty.KattyExpression.HAPPY));
+                break;
+
+            case "bye":
+                userExit = true;
+                break;
+
+            default:
+                String taskManagerOutput = taskManager.addTask(new Task(userCommand));
+                System.out.println(kattyMessage(new String[]{taskManagerOutput, "", ""}, KattyExpression.NORMAL));
             }
 
-            System.out.println(kattyMessage(new String[]{userCommand, "", ""}, KattyExpression.THINKING));
+            if (userExit) {
+                break;
+            }
         }
 
         scanner.close();
 
         // Goodbye message
-        System.out.println(kattyMessage(new String[]{"Always glad to help!", "", "Goodbye..."}, KattyExpression.HAPPY));
+        System.out.println(kattyMessage(new String[]{"Always glad to help!", "", "Goodbye..."},
+                           KattyExpression.HAPPY));
     }
 }
