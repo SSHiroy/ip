@@ -1,4 +1,6 @@
-Hello from
+
+
+Welcome to
  __   ___        __       ___________   ___________   ___  ___
 |/"| /  ")      /""\     ("     _   ") ("     _   ") |"  \/"  |
 (: |/   /      /    \     )__/  \\__/   )__/  \\__/   \   \  /
@@ -6,4 +8,169 @@ Hello from
 (// _  \     //  __'  \      |.  |         |.  |       /   /
 |: | \  \   /   /  \\  \     \:  |         \:  |      /   /
 (__|  \__) (___/    \___)     \__|          \__|     |___/
+
+
+
+ /\_/\  | Hi there! Katty's ready to help!   
+( o.o ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | Let me recall try to recall!       
+( -.- ) |                                    
+ > ^ <  | If I remember correctly...         
+
+
+
+ /\_/\  | Nothing to do!                     
+( o.o ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | Hope that helps!                   
+( ^.^ ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | I need more details! Follow the format
+( ?.? ) |                                    
+ > ^ <  | todo title ; deadline title /by datetime ; event title /from datetime /to datetime
+
+
+
+ /\_/\  | Let's get to work! It's on the list...
+( o.o ) |                                    
+ > ^ <  | [T] [   ] Task 1                   
+
+
+
+ /\_/\  | Let me recall try to recall!       
+( -.- ) |                                    
+ > ^ <  | If I remember correctly...         
+
+
+----------
+Task 1: [T] [   ] Task 1
+-----------
+
+ /\_/\  | Hope that helps!                   
+( ^.^ ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | I need more details! Follow the format
+( ?.? ) |                                    
+ > ^ <  | todo title ; deadline title /by datetime ; event title /from datetime /to datetime
+
+
+
+ /\_/\  | I can't add this! Write it as 'title /by datetime'
+( ?.? ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | Let's get to work! It's on the list...
+( o.o ) |                                    
+ > ^ <  | [D] [   ] Deadline 1 (by: Monday)  
+
+
+
+ /\_/\  | Let me recall try to recall!       
+( -.- ) |                                    
+ > ^ <  | If I remember correctly...         
+
+
+----------
+Task 1: [T] [   ] Task 1
+Task 2: [D] [   ] Deadline 1 (by: Monday)
+-----------
+
+ /\_/\  | Hope that helps!                   
+( ^.^ ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | I need more details! Follow the format
+( ?.? ) |                                    
+ > ^ <  | todo title ; deadline title /by datetime ; event title /from datetime /to datetime
+
+
+
+ /\_/\  | I can't add this! Write it as 'title /from datetime /to datetime'
+( o.o ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | I can't add this! Write it as 'title /from datetime /to datetime'
+( o.o ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | You got it! I've added it to my memory...
+( o.o ) |                                    
+ > ^ <  | [E] [   ] Event 1 (from: Monday to: Tuesday)
+
+
+
+ /\_/\  | Let me recall try to recall!       
+( -.- ) |                                    
+ > ^ <  | If I remember correctly...         
+
+
+----------
+Task 1: [T] [   ] Task 1
+Task 2: [D] [   ] Deadline 1 (by: Monday)
+Task 3: [E] [   ] Event 1 (from: Monday to: Tuesday)
+-----------
+
+ /\_/\  | Hope that helps!                   
+( ^.^ ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | I've marked it as complete! Nice work!
+( o.o ) |                                    
+ > ^ <  | [T] [ X ] Task 1                   
+
+
+
+ /\_/\  | I've marked it as complete! Nice work!
+( o.o ) |                                    
+ > ^ <  | [D] [ X ] Deadline 1 (by: Monday)  
+
+
+
+ /\_/\  | Task is already completed!         
+( ?.? ) |                                    
+ > ^ <  |                                    
+
+
+
+ /\_/\  | I've marked it as incomplete. Let's hope it doesn't stay that way for long...
+( o.o ) |                                    
+ > ^ <  |                                    
+
+
+[D] [   ] Deadline 1 (by: Monday)
+
+ /\_/\  | Task was never completed!          
+( ?.? ) |                                    
+ > ^ <  |                                    
+
+
+[E] [   ] Event 1 (from: Monday to: Tuesday)
+
+ /\_/\  | Always glad to help!               
+( ^.^ ) |                                    
+ > ^ <  | Goodbye...                         
+
 
