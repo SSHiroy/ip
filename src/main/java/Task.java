@@ -1,10 +1,10 @@
 /**
- * Provides a simple implementation for tasks.
+ * Provides a simple implementation for various types of tasks.
  *
  * <p>This class helps to structure and
- * manage data for tasks.</p>
+ * manage data for a variety of tasks.</p>
  */
-class Task {
+abstract class Task {
     private String taskName;
     private boolean status;
 

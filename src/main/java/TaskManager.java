@@ -15,9 +15,51 @@ class TaskManager {
         this.tasks = new ArrayList<>();
     }
 
-    public KattyResult addTask(Task task) {
+    public KattyResult parser(String command, String input) {
+        switch (command) {
+        case "todo" -> {
+            return toDoParser(input);
+        }
+        case "deadline" -> {
+            return deadlineParser(input);
+        }
+        case "event" -> {
+            return eventParser(input);
+        }
+        default -> {
+            return new KattyResult(false, "Not a valid event type.", "", null);
+        }
+        }
+    }
+
+    private KattyResult toDoParser(String input) {
+        ToDo task = new ToDo(input);
         this.tasks.add(task);
-        return new KattyResult(true, "Let's get to work...", task.toString(), null);
+        return new KattyResult(true, "Let's get to work! It's on the list...", task.toString(), null);
+    }
+
+    private KattyResult deadlineParser(String input) {
+        String[] s = input.split(" /by ");
+        if (s.length != 2) {
+            return new KattyResult(false, "I can't add this! Write it as 'title /by datetime'", "", null);
+        } else {
+            Deadline task = new Deadline(s[0], s[1]);
+            this.tasks.add(task);
+            return new KattyResult(true, "Let's get to work! It's on the list...", task.toString(), null);
+        }
+    }
+
+    private KattyResult eventParser(String input) {
+        String[] s = input.split(" /from | /to ");
+        if (s.length != 3) {
+            return new KattyResult(true,
+                           "I can't add this! Write it as 'title /from datetime /to datetime'",
+                              "", null);
+        } else {
+            Event task = new Event(s[0], s[1], s[2]);
+            this.tasks.add(task);
+            return new KattyResult(true, "You got it! I've added it to my memory...", task.toString(), null);
+        }
     }
 
     public KattyResult markDone(int i) {

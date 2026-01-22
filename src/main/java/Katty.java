@@ -87,10 +87,27 @@ public class Katty {
             String userCommand = scanner.nextLine().strip();
             String[] command = userCommand.split(" ", 2);
             boolean userExit = false;
-
             switch (command[0]) {
 
-                case "" -> System.out.println(kattyMessage(new String[]{"Meow?", "", ""}, KattyExpression.NORMAL));
+                case "" -> System.out.println(kattyMessage(new String[]{"Meow?", "", "(Try typing a command..."},
+                            KattyExpression.NORMAL));
+
+                case "todo", "deadline", "event" -> {
+                    if (command.length != 2) {
+                        System.out.println(kattyMessage(new String[]{
+                            "I need more details! Follow the format",
+                            "",
+                            "todo title ; deadline title /by datetime ; event title /from datetime /to datetime"},
+                            KattyExpression.CONFUSED));
+                        break;
+                    }
+                    KattyResult result = taskManager.parser(command[0], command[1]);
+                    System.out.println(kattyMessage(new String[]{
+                                result.getMessage(),
+                                "",
+                                result.isSuccess() ? result.getData() : result.getException()},
+                                result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+                }
 
                 case "list" -> {
                     System.out.println(kattyMessage(new String[]{"Let me recall try to recall!", "",
@@ -143,13 +160,9 @@ public class Katty {
 
                 case "bye" -> userExit = true;
 
-                default -> {
-                    KattyResult result = taskManager.addTask(new Task(userCommand));
-                    System.out.println(kattyMessage(new String[]{(result.isSuccess() ? "added: " : "could not add: ")
-                            + result.getData(), "",
-                            result.isSuccess() ? result.getMessage() : result.getException()},
-                            KattyExpression.NORMAL));
-                }
+                default -> System.out.println(kattyMessage(
+                        new String[]{"I'm not sure what to do...", "", "(Try typing a valid command..."},
+                        KattyExpression.CONFUSED));
             }
 
             if (userExit) {
