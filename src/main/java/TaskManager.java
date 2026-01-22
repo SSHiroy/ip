@@ -85,10 +85,10 @@ class TaskManager {
             if (success) {
                 return new KattyResult(success,
                         "I've marked it as incomplete. Let's hope it doesn't stay that way for long...",
-                        this.tasks.get(i).toString(), null);
+                        this.tasks.get(i).toString(), KattyException.invalidCompletion());
             } else {
                 return new KattyResult(success, "Task was never completed!",
-                        this.tasks.get(i).toString(), null);
+                        this.tasks.get(i).toString(), KattyException.invalidCompletion());
             }
         } catch (IndexOutOfBoundsException e) {
             return new KattyResult(false, "That task doesn't exist!", null, e);

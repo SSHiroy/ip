@@ -37,10 +37,10 @@ public class Katty {
         }
 
         final String eyes = switch (expression) {
-            case HAPPY -> "^.^";
-            case THINKING -> "-.-";
-            case CONFUSED -> "?.?";
-            case NORMAL -> "o.o";
+        case HAPPY -> "^.^";
+        case THINKING -> "-.-";
+        case CONFUSED -> "?.?";
+        case NORMAL -> "o.o";
         };
 
         return "\n" + String.format(
@@ -82,6 +82,8 @@ public class Katty {
         Scanner scanner = new Scanner(System.in);
         TaskManager taskManager = new TaskManager();
 
+        boolean visibleExceptions = false;
+
         // User command loop
         while (true) {
             String userCommand = scanner.nextLine().strip();
@@ -89,80 +91,100 @@ public class Katty {
             boolean userExit = false;
             switch (command[0]) {
 
-                case "" -> System.out.println(kattyMessage(new String[]{"Meow?", "", "(Try typing a command..."},
-                            KattyExpression.NORMAL));
+            case "" -> System.out.println(kattyMessage(new String[]{
+                "Meow?",
+                visibleExceptions ? KattyException.emptyInputException().toString() : "",
+                "(Try typing a command..."},
+                KattyExpression.NORMAL));
 
-                case "todo", "deadline", "event" -> {
-                    if (command.length != 2) {
-                        System.out.println(kattyMessage(new String[]{
-                            "I need more details! Follow the format",
-                            "",
-                            "todo title ; deadline title /by datetime ; event title /from datetime /to datetime"},
-                            KattyExpression.CONFUSED));
-                        break;
-                    }
-                    KattyResult result = taskManager.parser(command[0], command[1]);
+            case "dev" -> {
+                visibleExceptions = !visibleExceptions;
+                if (visibleExceptions) {
                     System.out.println(kattyMessage(new String[]{
-                                result.getMessage(),
-                                "",
-                                result.isSuccess() ? result.getData() : result.getException()},
-                                result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+                        "Dev mode enabled!", "", "I'll have to think extra hard now..."},
+                        KattyExpression.THINKING));
+                } else {
+                    System.out.println(kattyMessage(new String[]{
+                        "Dev mode disabled.", "", ""}, KattyExpression.NORMAL));
                 }
+            }
 
-                case "list" -> {
-                    System.out.println(kattyMessage(new String[]{"Let me recall try to recall!", "",
-                            "If I remember correctly..."}, KattyExpression.THINKING));
-
-                    String tasks = taskManager.getFormattedTaskList();
-
-                    if (tasks.isBlank()) {
-                        System.out.println(Katty.kattyMessage(new String[]{"Nothing to do!", "", ""},
-                                KattyExpression.NORMAL));
-                    } else {
-                        System.out.println(tasks);
-                    }
-
-                    System.out.println(Katty.kattyMessage(new String[]{"Hope that helps!", "", ""},
-                            Katty.KattyExpression.HAPPY));
-                }
-
-                case "mark" -> {
-                    KattyResult result;
-                    try {
-                        int i = Integer.parseInt(command[1]);
-                        result = taskManager.markDone(i);
-
-                    } catch (NumberFormatException e) {
-                        result = new KattyResult(false, "That's not a valid task number!",
-                                "", null);
-                    }
-
-                    System.out.println(kattyMessage(new String[]{result.getMessage(), "",
-                                    result.isSuccess() ? result.getData() : result.getException()},
-                            result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
-                }
-
-                case "unmark" -> {
-                    KattyResult result;
-                    try {
-                        int i = Integer.parseInt(command[1]);
-                        result = taskManager.markIncomplete(i);
-
-                    } catch (NumberFormatException e) {
-                        result = new KattyResult(false, "That's not a valid task number!",
-                                            "", null);
-                    }
-
-                    System.out.println(kattyMessage(new String[]{result.getMessage(), "", result.getException()},
-                            result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
-                    System.out.println(result.getData());
-                }
-
-                case "bye" -> userExit = true;
-
-                default -> System.out.println(kattyMessage(
-                        new String[]{"I'm not sure what to do...", "", "(Try typing a valid command..."},
+            case "todo", "deadline", "event" -> {
+                if (command.length != 2) {
+                    System.out.println(kattyMessage(new String[]{
+                        "I need more details! Follow the format",
+                        visibleExceptions ? KattyException.invalidTask().toString() : "",
+                        "todo title ; deadline title /by datetime ; event title /from datetime /to datetime"},
                         KattyExpression.CONFUSED));
+                    break;
+                }
+                KattyResult result = taskManager.parser(command[0], command[1]);
+                System.out.println(kattyMessage(new String[]{
+                            result.getMessage(), "",
+                            result.isSuccess() ? result.getData() : result.getException()},
+                            result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+            }
+
+            case "list" -> {
+                System.out.println(kattyMessage(new String[]{"Let me recall try to recall!", "",
+                    "If I remember correctly..."}, KattyExpression.THINKING));
+
+                String tasks = taskManager.getFormattedTaskList();
+
+                if (tasks.isBlank()) {
+                    System.out.println(Katty.kattyMessage(new String[]{"Nothing to do!", "", ""},
+                            KattyExpression.NORMAL));
+                } else {
+                    System.out.println(tasks);
+                }
+
+                System.out.println(Katty.kattyMessage(new String[]{"Hope that helps!", "", ""},
+                        Katty.KattyExpression.HAPPY));
+            }
+
+            case "mark" -> {
+                KattyResult result;
+                try {
+                    int i = Integer.parseInt(command[1]);
+                    result = taskManager.markDone(i);
+
+                } catch (NumberFormatException e) {
+                    result = new KattyResult(false, "That's not a valid task number!",
+                            "", KattyException.noTaskFound());
+                }
+
+                String exceptionMessage = !result.isSuccess() && visibleExceptions ? result.getException() : "";
+
+                System.out.println(kattyMessage(new String[]{result.getMessage(), "",
+                                result.isSuccess() ? result.getData() : exceptionMessage},
+                        result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+            }
+
+            case "unmark" -> {
+                KattyResult result;
+                try {
+                    int i = Integer.parseInt(command[1]);
+                    result = taskManager.markIncomplete(i);
+
+                } catch (NumberFormatException e) {
+                    result = new KattyResult(false, "That's not a valid task number!",
+                                        "", KattyException.noTaskFound());
+                }
+
+                String exceptionMessage = !result.isSuccess() && visibleExceptions ? result.getException() : "";
+
+                System.out.println(kattyMessage(new String[]{result.getMessage(), "", exceptionMessage},
+                        result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+                System.out.println(result.getData());
+            }
+
+            case "bye" -> userExit = true;
+
+            default -> System.out.println(kattyMessage(
+                    new String[]{"I'm not sure what to do...",
+                                 visibleExceptions ? KattyException.invalidCommand().toString() : "",
+                                 "(Try typing a valid command..."},
+                    KattyExpression.CONFUSED));
             }
 
             if (userExit) {
