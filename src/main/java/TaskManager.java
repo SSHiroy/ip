@@ -91,7 +91,17 @@ class TaskManager {
                         this.tasks.get(i).toString(), KattyException.invalidCompletion());
             }
         } catch (IndexOutOfBoundsException e) {
-            return new KattyResult(false, "That task doesn't exist!", null, e);
+            return new KattyResult(false, "That task doesn't exist!", null, KattyException.noTaskFound());
+        }
+    }
+
+    public KattyResult deleteTask(int i) {
+        i = i - 1;
+        try {
+            Task task = this.tasks.remove(i);
+            return new KattyResult(true, "", task.toString(), null);
+        } catch (IndexOutOfBoundsException e) {
+            return new KattyResult(false, "That task doesn't exist!", null, KattyException.noTaskFound());
         }
     }
 

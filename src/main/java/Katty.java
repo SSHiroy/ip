@@ -178,6 +178,25 @@ public class Katty {
                 System.out.println(result.getData());
             }
 
+            case "delete" -> {
+                KattyResult result;
+                try {
+                    int i = Integer.parseInt(command[1]);
+                    result = taskManager.deleteTask(i);
+
+                } catch (NumberFormatException e) {
+                    result = new KattyResult(false, "That's not a valid task number!",
+                                        "", KattyException.noTaskFound());
+                }
+
+                String exceptionMessage = !result.isSuccess() && visibleExceptions
+                        ? result.getException() : "What were we talking about...";
+
+                System.out.println(kattyMessage(new String[]{"Got it! I've forgotten all about",
+                        result.getData(), exceptionMessage},
+                        result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+            }
+
             case "bye" -> userExit = true;
 
             default -> System.out.println(kattyMessage(
