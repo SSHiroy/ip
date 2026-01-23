@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -8,7 +9,7 @@ import java.util.stream.IntStream;
  * <p>This class provides a way for Katty to handle the creation,
  * deletion or modification of tasks for the user.</p>
  */
-class TaskManager {
+class TaskManager implements Serializable {
     private final List<Task> tasks;
 
     public TaskManager() {

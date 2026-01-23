@@ -1,10 +1,12 @@
+import java.io.Serializable;
+
 /**
  * Provides a simple implementation for various types of tasks.
  *
  * <p>This class helps to structure and
  * manage data for a variety of tasks.</p>
  */
-abstract class Task {
+abstract class Task implements Serializable {
     private String taskName;
     private boolean status;
 
