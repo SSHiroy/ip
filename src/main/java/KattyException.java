@@ -27,4 +27,12 @@ class KattyException extends Exception {
     public static KattyException failToSave() {
         return new KattyException("Save file could not be written to disk.");
     }
+
+    public static KattyException noSaveFile() {
+        return new KattyException("No valid save file was found.");
+    }
+
+    public static KattyException corruptFile() {
+        return new KattyException("Save file is corrupted.");
+    }
 }

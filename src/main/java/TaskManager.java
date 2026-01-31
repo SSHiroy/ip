@@ -1,5 +1,8 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +16,8 @@ import java.util.stream.IntStream;
  * deletion or modification of tasks for the user.</p>
  */
 class TaskManager implements Serializable {
-    private final List<Task> tasks;
+    private static final long serialVersionUID = 1L;
+    private List<Task> tasks;
 
     public TaskManager() {
         this.tasks = new ArrayList<>();
@@ -128,17 +132,35 @@ class TaskManager implements Serializable {
     }
 
     public KattyResult saveFile() {
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream("kattySave");
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        try (FileOutputStream fos = new FileOutputStream("kattySave");
+            ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
-            objectOutputStream.writeObject(this.tasks);
+            oos.writeObject(this.tasks);
 
-            objectOutputStream.close();
-            fileOutputStream.close();
         } catch (IOException e) {
             return new KattyResult(false, "Save file could not be made!", "", KattyException.failToSave());
         }
+
         return new KattyResult(true, "", "", null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public KattyResult loadFile() {
+        try (FileInputStream fis = new FileInputStream("kattySave");
+            ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+            // This requires an unchecked cast but should be safe using exception catching
+            this.tasks = (List<Task>) ois.readObject();
+
+        } catch (FileNotFoundException e) {
+            return new KattyResult(false, "No save file found!", "", KattyException.noSaveFile());
+        } catch (IOException e) {
+            return new KattyResult(false, "File could not be read. It might be corrupted!",
+                    "", KattyException.corruptFile());
+        } catch (ClassNotFoundException e) {
+            return new KattyResult(false, "File could not be read. The save file could be a different version!",
+                    "", KattyException.noSaveFile());
+        }
+        return new KattyResult(true, "Save file found. Data has been loaded!", this.getFormattedTaskList(), null);
     }
 }

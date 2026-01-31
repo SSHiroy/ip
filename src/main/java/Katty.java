@@ -82,7 +82,19 @@ public class Katty {
         Scanner scanner = new Scanner(System.in);
         TaskManager taskManager = new TaskManager();
 
+        KattyResult saveFileFound = taskManager.loadFile();
+
         boolean visibleExceptions = false;
+
+        if (saveFileFound.isSuccess()) {
+            System.out.println(kattyMessage(new String[]{"I found a save file!", "", "Data has been restored."},
+                    KattyExpression.HAPPY));
+        } else {
+            System.out.println(kattyMessage(new String[]{"I could not find a save file! "
+                    + "Maybe it's your first time meeting me...", saveFileFound.getMessage(),
+                            saveFileFound.getException()},
+                    KattyExpression.NORMAL));
+        }
 
         // User command loop
         while (true) {
