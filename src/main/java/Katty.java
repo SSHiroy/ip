@@ -125,8 +125,10 @@ public class Katty {
                 if (command.length != 2) {
                     System.out.println(kattyMessage(new String[]{
                         "I need more details! Follow the format",
-                        visibleExceptions ? KattyException.invalidTask().toString() : "",
-                        "todo title ; deadline title /by datetime ; event title /from datetime /to datetime"},
+                        visibleExceptions ? KattyException.invalidTask().toString() : "", String.format(
+                        "todo title ; deadline title /by %s ; "
+                            + "event title /from %s /to %s", Deadline.DEADLINE_FORMAT, Event.EVENT_FORMAT,
+                                    Event.EVENT_FORMAT)},
                         KattyExpression.CONFUSED));
                     break;
                 }
