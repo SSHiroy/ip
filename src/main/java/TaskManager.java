@@ -62,7 +62,7 @@ class TaskManager implements Serializable {
     private KattyResult eventParser(String input) {
         String[] s = input.split(" /from | /to ");
         if (s.length != 3) {
-            return new KattyResult(true,
+            return new KattyResult(false,
                            "I can't add this! Write it as 'title /from datetime /to datetime'",
                               "", null);
         } else {
