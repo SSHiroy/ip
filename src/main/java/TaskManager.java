@@ -1,3 +1,6 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ class TaskManager implements Serializable {
     private KattyResult toDoParser(String input) {
         ToDo task = new ToDo(input);
         this.tasks.add(task);
+        saveFile();
         return new KattyResult(true, "Let's get to work! It's on the list...", task.toString(), null);
     }
 
@@ -46,6 +50,7 @@ class TaskManager implements Serializable {
         } else {
             Deadline task = new Deadline(s[0], s[1]);
             this.tasks.add(task);
+            saveFile();
             return new KattyResult(true, "Let's get to work! It's on the list...", task.toString(), null);
         }
     }
@@ -59,6 +64,7 @@ class TaskManager implements Serializable {
         } else {
             Event task = new Event(s[0], s[1], s[2]);
             this.tasks.add(task);
+            saveFile();
             return new KattyResult(true, "You got it! I've added it to my memory...", task.toString(), null);
         }
     }
@@ -68,6 +74,7 @@ class TaskManager implements Serializable {
         try {
             boolean success = this.tasks.get(i).markDone();
             if (success) {
+                saveFile();
                 return new KattyResult(success, "I've marked it as complete! Nice work!",
                         this.tasks.get(i).toString(), null);
             } else {
@@ -83,6 +90,7 @@ class TaskManager implements Serializable {
         i = i - 1;
         try {
             boolean success = this.tasks.get(i).markIncomplete();
+            saveFile();
             if (success) {
                 return new KattyResult(success,
                         "I've marked it as incomplete. Let's hope it doesn't stay that way for long...",
@@ -100,6 +108,7 @@ class TaskManager implements Serializable {
         i = i - 1;
         try {
             Task task = this.tasks.remove(i);
+            saveFile();
             return new KattyResult(true, "", task.toString(), null);
         } catch (IndexOutOfBoundsException e) {
             return new KattyResult(false, "That task doesn't exist!", null, KattyException.noTaskFound());
@@ -116,5 +125,20 @@ class TaskManager implements Serializable {
                 .toList();
 
         return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";
+    }
+
+    public KattyResult saveFile() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("kattySave");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            objectOutputStream.writeObject(this.tasks);
+
+            objectOutputStream.close();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            return new KattyResult(false, "Save file could not be made!", "", KattyException.failToSave());
+        }
+        return new KattyResult(true, "", "", null);
     }
 }

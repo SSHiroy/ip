@@ -23,4 +23,8 @@ class KattyException extends Exception {
     public static KattyException emptyInputException() {
         return new KattyException("User input is empty.");
     }
+
+    public static KattyException failToSave() {
+        return new KattyException("Save file could not be written to disk.");
+    }
 }
