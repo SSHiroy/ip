@@ -1,3 +1,5 @@
+package katty;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -8,6 +10,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import katty.task.Task;
+import katty.task.TaskParser;
 
 /**
  * Provides a management system for tasks.

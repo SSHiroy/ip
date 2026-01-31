@@ -1,7 +1,9 @@
+package katty.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-class Deadline extends Task {
+public class Deadline extends Task {
     public static final String DEADLINE_FORMAT = "yyyy-MM-dd HH:mm";
     private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(DEADLINE_FORMAT);
     private LocalDateTime deadlineBy;

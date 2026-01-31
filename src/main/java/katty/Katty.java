@@ -1,4 +1,10 @@
+package katty;
+
 import java.util.Scanner;
+
+import katty.task.Deadline;
+import katty.task.Event;
+
 
 /**
  * The main entry point for the Katty Chatbot application.

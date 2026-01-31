@@ -1,4 +1,6 @@
-class KattyException extends Exception {
+package katty;
+
+public class KattyException extends Exception {
     public KattyException(String exception) {
         super(exception);
     }

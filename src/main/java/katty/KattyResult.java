@@ -1,3 +1,5 @@
+package katty;
+
 /**
  * A utility class to help communicate the result of operations.
  *
