@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 
 class Deadline extends Task {
     public static final String DEADLINE_FORMAT = "yyyy-MM-dd HH:mm";
-    private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(DEADLINE_FORMAT);
+    private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(DEADLINE_FORMAT);
     private LocalDateTime deadlineBy;
 
     public Deadline(String deadlineName, String deadlineBy) {

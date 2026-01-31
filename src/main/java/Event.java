@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 
 class Event extends Task {
     public static final String EVENT_FORMAT = "yyyy-MM-dd HH:mm";
-    private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(EVENT_FORMAT);
+    private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(EVENT_FORMAT);
     private LocalDateTime timeFrom;
     private LocalDateTime timeTo;
 

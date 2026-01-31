@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
  * deletion or modification of tasks for the user.</p>
  */
 class TaskManager implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private List<Task> tasks;
 
     public TaskManager() {
@@ -24,52 +24,13 @@ class TaskManager implements Serializable {
     }
 
     public KattyResult parser(String command, String input) {
-        switch (command) {
-        case "todo" -> {
-            return toDoParser(input);
-        }
-        case "deadline" -> {
-            return deadlineParser(input);
-        }
-        case "event" -> {
-            return eventParser(input);
-        }
-        default -> {
-            return new KattyResult(false, "Not a valid event type.", "", null);
-        }
-        }
-    }
-
-    private KattyResult toDoParser(String input) {
-        ToDo task = new ToDo(input);
-        this.tasks.add(task);
-        saveFile();
-        return new KattyResult(true, "Let's get to work! It's on the list...", task.toString(), null);
-    }
-
-    private KattyResult deadlineParser(String input) {
-        String[] s = input.split(" /by ");
-        if (s.length != 2) {
-            return new KattyResult(false, "I can't add this! Write it as 'title /by datetime'", "", null);
-        } else {
-            Deadline task = new Deadline(s[0], s[1]);
-            this.tasks.add(task);
+        try {
+            Task t = TaskParser.parser(command, input);
+            this.tasks.add(t);
             saveFile();
-            return new KattyResult(true, "Let's get to work! It's on the list...", task.toString(), null);
-        }
-    }
-
-    private KattyResult eventParser(String input) {
-        String[] s = input.split(" /from | /to ");
-        if (s.length != 3) {
-            return new KattyResult(false,
-                           "I can't add this! Write it as 'title /from datetime /to datetime'",
-                              "", null);
-        } else {
-            Event task = new Event(s[0], s[1], s[2]);
-            this.tasks.add(task);
-            saveFile();
-            return new KattyResult(true, "You got it! I've added it to my memory...", task.toString(), null);
+            return new KattyResult(true, "Got it! This is what's up...", t.toString(), null);
+        } catch (KattyException e) {
+            return new KattyResult(false, "That's not right...", "", e);
         }
     }
 
