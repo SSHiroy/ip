@@ -1,7 +1,6 @@
 package katty.task;
 
 import katty.KattyException;
-import katty.ToDo;
 
 public class TaskParser {
     public static Task parser(String command, String input) throws KattyException {

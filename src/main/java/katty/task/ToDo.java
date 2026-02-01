@@ -1,6 +1,4 @@
-package katty;
-
-import katty.task.Task;
+package katty.task;
 
 public class ToDo extends Task {
     public ToDo(String taskName) {
