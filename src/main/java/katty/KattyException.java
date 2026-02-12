@@ -44,4 +44,8 @@ public class KattyException extends Exception {
     public static KattyException corruptFile() {
         return new KattyException("Save file is corrupted.");
     }
+
+    public static KattyException badDateFormat() {
+        return new KattyException("The date given is either invalid or not in a valid format as dd-MM-yyyy HH:mm.");
+    }
 }
