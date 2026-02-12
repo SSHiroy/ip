@@ -1,5 +1,7 @@
 package katty.task;
 
+import java.time.format.DateTimeParseException;
+
 import katty.KattyException;
 
 public class TaskParser {
@@ -12,16 +14,22 @@ public class TaskParser {
             String[] s = input.split(" /by ");
             if (s.length != 2) {
                 throw KattyException.invalidTask();
-            } else {
+            }
+            try {
                 return new Deadline(s[0], s[1]);
+            } catch (DateTimeParseException e) {
+                throw KattyException.badDateFormat();
             }
         }
         case "event" -> {
             String[] s = input.split(" /from | /to ");
             if (s.length != 3) {
                 throw KattyException.invalidTask();
-            } else {
+            }
+            try {
                 return new Event(s[0], s[1], s[2]);
+            } catch (DateTimeParseException e) {
+                throw KattyException.badDateFormat();
             }
         }
         default -> throw KattyException.invalidTask();
