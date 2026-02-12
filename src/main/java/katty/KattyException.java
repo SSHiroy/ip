@@ -1,5 +1,12 @@
 package katty;
 
+/**
+ * Represents custom exceptions used in Katty,
+ * capable of providing messages that are more relevant to the dev.
+ *
+ * <p>This class extends {@code Exception} and provides static methods to
+ *  create specific exception messages for common error conditions.</p>
+ */
 public class KattyException extends Exception {
     public KattyException(String exception) {
         super(exception);
