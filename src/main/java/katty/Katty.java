@@ -63,10 +63,8 @@ public class Katty {
     /**
      * Initializes the chatbot, displays the welcome logo, and starts
      * the interaction session.
-     *
-     * @param args Command line arguments for configuration (not used).
      */
-    public static void main(String[] args) {
+    public static void kattyStart() {
         String logo =
                     """
                      __   ___        __       ___________   ___________   ___  ___
