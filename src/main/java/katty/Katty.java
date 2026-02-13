@@ -163,8 +163,13 @@ public class Katty {
             case "mark" -> {
                 KattyResult result;
                 try {
-                    int i = Integer.parseInt(command[1]);
-                    result = taskManager.markDone(i);
+                    if (command.length != 2) {
+                        result = new KattyResult(false, "That's not a valid task number!",
+                                "", KattyException.noTaskFound());
+                    } else {
+                        int i = Integer.parseInt(command[1]);
+                        result = taskManager.markDone(i);
+                    }
 
                 } catch (NumberFormatException e) {
                     result = new KattyResult(false, "That's not a valid task number!",
@@ -182,8 +187,13 @@ public class Katty {
             case "unmark" -> {
                 KattyResult result;
                 try {
-                    int i = Integer.parseInt(command[1]);
-                    result = taskManager.markIncomplete(i);
+                    if (command.length != 2) {
+                        result = new KattyResult(false, "That's not a valid task number!",
+                                "", KattyException.noTaskFound());
+                    } else {
+                        int i = Integer.parseInt(command[1]);
+                        result = taskManager.markIncomplete(i);
+                    }
 
                 } catch (NumberFormatException e) {
                     result = new KattyResult(false, "That's not a valid task number!",
@@ -201,8 +211,13 @@ public class Katty {
             case "delete" -> {
                 KattyResult result;
                 try {
-                    int i = Integer.parseInt(command[1]);
-                    result = taskManager.deleteTask(i);
+                    if (command.length != 2) {
+                        result = new KattyResult(false, "That's not a valid task number!",
+                                "", KattyException.noTaskFound());
+                    } else {
+                        int i = Integer.parseInt(command[1]);
+                        result = taskManager.deleteTask(i);
+                    }
 
                 } catch (NumberFormatException e) {
                     result = new KattyResult(false, "That's not a valid task number!",
@@ -210,11 +225,16 @@ public class Katty {
                 }
 
                 String exceptionMessage = !result.isSuccess() && visibleExceptions
-                        ? result.getException().getMessage() : "What were we talking about...";
+                        ? result.getException().getMessage() : "";
 
-                System.out.println(kattyMessage(new String[]{"Got it! I've forgotten all about",
-                        result.getData(), exceptionMessage},
-                        result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+                if (result.isSuccess()) {
+                    System.out.println(kattyMessage(new String[]{"Got it! I've forgotten all about",
+                        result.getData(), "What were we talking about...?"},
+                            result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
+                } else {
+                    System.out.println(kattyMessage(new String[]{result.getMessage(), "", exceptionMessage},
+                                       KattyExpression.CONFUSED));
+                }
             }
 
             case "bye" -> userExit = true;
