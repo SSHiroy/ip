@@ -28,6 +28,13 @@ public class TaskManager implements Serializable {
         this.tasks = new ArrayList<>();
     }
 
+    /**
+     * Parses user command and input for generating the corresponding task.
+     *
+     * @param command type of task
+     * @param input task details
+     * @return success of operation
+     */
     public KattyResult parser(String command, String input) {
         try {
             Task t = TaskParser.parser(command, input);
