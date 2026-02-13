@@ -20,7 +20,7 @@ import katty.task.TaskParser;
  * <p>This class provides a way for Katty to handle the creation,
  * deletion or modification of tasks for the user.</p>
  */
-class TaskManager implements Serializable {
+public class TaskManager implements Serializable {
     private static final long serialVersionUID = 2L;
     private List<Task> tasks;
 
