@@ -31,6 +31,10 @@ public abstract class Task implements Serializable {
         return this.status && !(this.status = false);
     }
 
+    public String getTaskName() {
+        return taskName;
+    }
+
     @Override
     public String toString() {
         return String.format("[ %s ] ", this.status ? "X" : " ") + this.taskName;
