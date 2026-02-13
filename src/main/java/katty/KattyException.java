@@ -24,6 +24,12 @@ public class KattyException extends Exception {
         return new KattyException("Invalid command entered.");
     }
 
+    /**
+     * Creates an exception indicating a completed task cannot be completed and
+     * an incomplete task cannot be unmarked for completion.
+     *
+     * @return {@code KattyException}
+     */
     public static KattyException invalidCompletion() {
         return new KattyException("Incomplete tasks can only be marked as complete, "
                                     + "complete tasks can only be marked as incomplete.");
