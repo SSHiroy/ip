@@ -49,10 +49,10 @@ class TaskManager implements Serializable {
                         this.tasks.get(i).toString(), null);
             } else {
                 return new KattyResult(success, "Task is already completed!",
-                                       this.tasks.get(i).toString(), null);
+                                       this.tasks.get(i).toString(), KattyException.invalidCompletion());
             }
         } catch (IndexOutOfBoundsException e) {
-            return new KattyResult(false, "That task doesn't exist!", null, e);
+            return new KattyResult(false, "That task doesn't exist!", null, KattyException.noTaskFound());
         }
     }
 
@@ -64,7 +64,7 @@ class TaskManager implements Serializable {
             if (success) {
                 return new KattyResult(success,
                         "I've marked it as incomplete. Let's hope it doesn't stay that way for long...",
-                        this.tasks.get(i).toString(), KattyException.invalidCompletion());
+                        this.tasks.get(i).toString(), null);
             } else {
                 return new KattyResult(success, "Task was never completed!",
                         this.tasks.get(i).toString(), KattyException.invalidCompletion());
