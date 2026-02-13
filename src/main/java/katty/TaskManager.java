@@ -158,6 +158,17 @@ public class TaskManager implements Serializable {
         return new KattyResult(true, "Save file found. Data has been loaded!", this.getFormattedTaskList(), null);
     }
 
+    /**
+     * Searches the task list for tasks whose names contain the specified keyword.
+     *
+     * <p>This method performs a case-sensitive search through all tasks in the
+     * {@code tasks} list. All matching tasks are converted to their string
+     * representations and concatenated with a newline character between each.
+     *
+     * @param keyword the keyword to search for within task names
+     * @return a string containing all matching tasks separated by newlines, or
+     *         "No tasks of that name!" if no matches are found
+     */
     public String findTasksByName(String keyword) {
         return tasks.stream().filter(i -> i.getTaskName().contains(keyword))
                              .map(Task::toString)
