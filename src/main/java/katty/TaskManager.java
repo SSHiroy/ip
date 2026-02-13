@@ -129,4 +129,10 @@ public class TaskManager implements Serializable {
         }
         return new KattyResult(true, "Save file found. Data has been loaded!", this.getFormattedTaskList(), null);
     }
+
+    public String findTasksByName(String keyword) {
+        return tasks.stream().filter(i -> i.getTaskName().contains(keyword))
+                             .map(Task::toString)
+                             .reduce((a, b) -> a + "\n" + b).orElse("No tasks of that name!");
+    }
 }

@@ -221,6 +221,12 @@ public class Katty {
 
             case "bye" -> userExit = true;
 
+            case "find" -> {
+                System.out.println(kattyMessage(new String[]{"Let me see...", "", "I think this is it!"},
+                                   KattyExpression.NORMAL));
+                System.out.println(taskManager.findTasksByName(command[1]) + "\n");
+            }
+
             default -> System.out.println(kattyMessage(
                     new String[]{"I'm not sure what to do...",
                                  visibleExceptions ? KattyException.invalidCommand().toString() : "",
