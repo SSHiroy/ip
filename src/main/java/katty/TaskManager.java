@@ -143,8 +143,9 @@ public class TaskManager implements Serializable {
         try (FileInputStream fis = new FileInputStream("kattySave");
             ObjectInputStream ois = new ObjectInputStream(fis)) {
 
-            // This requires an unchecked cast but should be safe using exception catching
-            this.tasks = (List<Task>) ois.readObject();
+            Object obj = ois.readObject();
+            assert obj instanceof List<?>;
+            this.tasks = (List<Task>) obj;
 
         } catch (FileNotFoundException e) {
             return new KattyResult(false, "No save file found!", "", KattyException.noSaveFile());
