@@ -4,14 +4,20 @@ import java.io.Serializable;
 
 /**
  * Provides a simple implementation for various types of tasks.
- *
- * <p>This class helps to structure and
- * manage data for a variety of tasks.</p>
+ * <p>
+ * This class helps to structure and manage data for a variety of tasks.
  */
 public abstract class Task implements Serializable {
     private String taskName;
     private boolean status;
 
+    /**
+     * Creates a new {@code Task} with the given name.
+     * <p>
+     * Tasks are incomplete by default.
+     *
+     * @param taskName name of task
+     */
     public Task(String taskName) {
         this.taskName = taskName;
         this.status = false;
