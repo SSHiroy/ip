@@ -98,7 +98,7 @@ public class Katty {
         } else {
             System.out.println(kattyMessage(new String[]{"I could not find a save file! "
                     + "Maybe it's your first time meeting me...", saveFileFound.getMessage(),
-                            saveFileFound.getException()},
+                            saveFileFound.getException().getMessage()},
                     KattyExpression.NORMAL));
         }
 
@@ -141,7 +141,7 @@ public class Katty {
                 KattyResult result = taskManager.parser(command[0], command[1]);
                 System.out.println(kattyMessage(new String[]{
                             result.getMessage(), "",
-                            result.isSuccess() ? result.getData() : result.getException()},
+                            result.isSuccess() ? result.getData() : result.getException().getMessage()},
                             result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
             }
 
@@ -173,10 +173,11 @@ public class Katty {
                             "", KattyException.noTaskFound());
                 }
 
-                String exceptionMessage = !result.isSuccess() && visibleExceptions ? result.getException() : "";
+                String exceptionMessage = !result.isSuccess() && visibleExceptions
+                        ? result.getException().toString() : "";
 
-                System.out.println(kattyMessage(new String[]{result.getMessage(), "",
-                                result.isSuccess() ? result.getData() : exceptionMessage},
+                System.out.println(kattyMessage(new String[]{result.getMessage(), exceptionMessage,
+                                result.getData()},
                         result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
             }
 
@@ -191,11 +192,12 @@ public class Katty {
                                         "", KattyException.noTaskFound());
                 }
 
-                String exceptionMessage = !result.isSuccess() && visibleExceptions ? result.getException() : "";
+                String exceptionMessage = !result.isSuccess() && visibleExceptions
+                        ? result.getException().getMessage() : "";
 
-                System.out.println(kattyMessage(new String[]{result.getMessage(), "", exceptionMessage},
+                System.out.println(kattyMessage(new String[]{result.getMessage(), exceptionMessage,
+                                result.getData()},
                         result.isSuccess() ? KattyExpression.NORMAL : KattyExpression.CONFUSED));
-                System.out.println(result.getData());
             }
 
             case "delete" -> {
@@ -210,7 +212,7 @@ public class Katty {
                 }
 
                 String exceptionMessage = !result.isSuccess() && visibleExceptions
-                        ? result.getException() : "What were we talking about...";
+                        ? result.getException().getMessage() : "What were we talking about...";
 
                 System.out.println(kattyMessage(new String[]{"Got it! I've forgotten all about",
                         result.getData(), exceptionMessage},
