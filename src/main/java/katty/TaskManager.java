@@ -39,6 +39,12 @@ public class TaskManager implements Serializable {
         }
     }
 
+    /**
+     * Marks a task in the task list {@code tasks} as complete using an index.
+     *
+     * @param i index of task in the list
+     * @return success of operation
+     */
     public KattyResult markDone(int i) {
         i = i - 1;
         try {
@@ -56,6 +62,12 @@ public class TaskManager implements Serializable {
         }
     }
 
+    /**
+     * Marks a task in the task list {@code tasks} as incomplete using an index.
+     *
+     * @param i index of task in the list
+     * @return success of operation
+     */
     public KattyResult markIncomplete(int i) {
         i = i - 1;
         try {
@@ -74,6 +86,12 @@ public class TaskManager implements Serializable {
         }
     }
 
+    /**
+     * Deletes a task in the task list {@code tasks} using an index.
+     *
+     * @param i index of task in the list
+     * @return success of operation
+     */
     public KattyResult deleteTask(int i) {
         i = i - 1;
         try {
@@ -97,6 +115,11 @@ public class TaskManager implements Serializable {
         return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";
     }
 
+    /**
+     * Saves serialized state of tasks {@code TaskManager} in a file.
+     *
+     * @return success of operation
+     */
     public KattyResult saveFile() {
         try (FileOutputStream fos = new FileOutputStream("kattySave");
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -110,6 +133,11 @@ public class TaskManager implements Serializable {
         return new KattyResult(true, "", "", null);
     }
 
+    /**
+     * Loads state of tasks {@code TaskManager} from a file.
+     *
+     * @return success of operation
+     */
     @SuppressWarnings("unchecked")
     public KattyResult loadFile() {
         try (FileInputStream fis = new FileInputStream("kattySave");
