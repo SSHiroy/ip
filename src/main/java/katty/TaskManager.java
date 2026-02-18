@@ -110,7 +110,7 @@ public class TaskManager {
             return "";
         }
         List<String> taskStringFormat = IntStream.range(0, tasks.size())
-                .mapToObj(i -> String.format("Task %d: %s", i + 1, tasks.get(i).toString()))
+                .mapToObj(i -> String.format("%d. %s", i + 1, tasks.get(i).toString()))
                 .toList();
 
         return String.join("\n", taskStringFormat);
@@ -125,7 +125,7 @@ public class TaskManager {
                 .toList();
 
         List<String> taskStringFormat = IntStream.range(0, sortedByName.size())
-                .mapToObj(i -> String.format("Task %d: %s", i + 1, sortedByName.get(i).toString()))
+                .mapToObj(i -> String.format("%d. %s", i + 1, sortedByName.get(i).toString()))
                 .toList();
 
         return String.join("\n", taskStringFormat);

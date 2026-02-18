@@ -22,8 +22,8 @@ public class KattyGui extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        chatContainer = new VBox(15);
-        chatContainer.setPadding(new Insets(15));
+        chatContainer = new VBox(20);
+        chatContainer.setPadding(new Insets(20));
         chatContainer.setStyle("-fx-background-color: #2b2b2b;");
 
         scrollPane = new ScrollPane(chatContainer);
@@ -36,27 +36,27 @@ public class KattyGui extends Application {
 
         TextField inputField = new TextField();
         inputField.setPromptText("Type a command...");
-        inputField.setFont(Font.font("Monospaced", 13));
-        inputField.setStyle("-fx-background-radius: 20; -fx-background-color: "
-                + "#3e3e3e; -fx-text-fill: white; -fx-padding: 8;");
+        inputField.setFont(Font.font("Monospaced", 16));
+        inputField.setStyle("-fx-background-radius: 25; -fx-background-color: "
+                + "#3e3e3e; -fx-text-fill: white; -fx-padding: 12;");
 
         Button sendButton = new Button("➤");
         sendButton.setStyle("-fx-background-radius: 50; -fx-background-color: #4caf50; "
-                + "-fx-text-fill: white; -fx-font-weight: bold;");
+                + "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;");
 
-        HBox inputBox = new HBox(10, inputField, sendButton);
+        HBox inputBox = new HBox(15, inputField, sendButton);
         HBox.setHgrow(inputField, Priority.ALWAYS);
-        inputBox.setPadding(new Insets(10));
+        inputBox.setPadding(new Insets(15));
         inputBox.setAlignment(Pos.CENTER);
         inputBox.setStyle("-fx-background-color: #3e3e3e;");
 
         VBox root = new VBox(scrollPane, inputBox);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        Scene scene = new Scene(root, 500, 700);
+        Scene scene = new Scene(root, 900, 800);
         primaryStage.setTitle("Katty Chat");
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(600);
+        primaryStage.setMinWidth(700);
         primaryStage.show();
 
         addMessage(Katty.getInitialGreeting(), false);
@@ -82,18 +82,12 @@ public class KattyGui extends Application {
         }
     }
 
-    /**
-     * Creates a message bubble.
-     *
-     * @param text   The message content.
-     * @param isUser True if right-aligned (user), false if left-aligned (Katty).
-     */
     private void addMessage(String text, boolean isUser) {
         Label label = new Label(text);
-        label.setFont(Font.font("Monospaced", 12));
+        label.setFont(Font.font("Monospaced", 15));
         label.setWrapText(true);
-        label.setMaxWidth(550);
-        label.setPadding(new Insets(10, 15, 10, 15));
+        label.setMaxWidth(700);
+        label.setPadding(new Insets(15, 20, 15, 20));
 
         HBox wrapper = new HBox(label);
 
@@ -101,16 +95,16 @@ public class KattyGui extends Application {
             wrapper.setAlignment(Pos.CENTER_RIGHT);
             label.setStyle("-fx-background-color: #005c4b; "
                     + "-fx-text-fill: white; "
-                    + "-fx-background-radius: 15 15 0 15;");
+                    + "-fx-background-radius: 20 20 0 20;");
 
-            HBox.setMargin(label, new Insets(0, 0, 0, 50));
+            HBox.setMargin(label, new Insets(0, 0, 0, 100));
         } else {
             wrapper.setAlignment(Pos.CENTER_LEFT);
             label.setStyle("-fx-background-color: #343f46; "
                     + "-fx-text-fill: #dcdcdc; "
-                    + "-fx-background-radius: 15 15 15 0;");
+                    + "-fx-background-radius: 20 20 20 0;");
 
-            HBox.setMargin(label, new Insets(0, 50, 0, 0));
+            HBox.setMargin(label, new Insets(0, 100, 0, 0));
         }
 
         chatContainer.getChildren().add(wrapper);

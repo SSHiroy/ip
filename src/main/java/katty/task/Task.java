@@ -44,6 +44,6 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return String.format("[ %s ] ", this.isComplete ? "X" : " ") + this.taskName;
+        return String.format("[%s] ", this.isComplete ? "X" : " ") + this.taskName;
     }
 }
