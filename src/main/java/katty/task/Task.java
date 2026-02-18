@@ -1,6 +1,7 @@
 package katty.task;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Provides a simple implementation for various types of tasks.
@@ -30,6 +31,8 @@ public abstract class Task implements Serializable {
     public boolean markIncomplete() {
         return this.status && !(this.status = false);
     }
+
+    public abstract LocalDateTime getSortDate();
 
     public String getTaskName() {
         return taskName;

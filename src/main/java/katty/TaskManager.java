@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -38,7 +39,8 @@ public class TaskManager implements Serializable {
     public KattyResult parser(String command, String input) {
         try {
             Task t = TaskParser.parser(command, input);
-            this.tasks.add(t);
+            tasks.add(t);
+            tasks.sort(Comparator.comparing(Task::getSortDate));
             saveFile();
             return new KattyResult(true, "Got it! This is what's up...", t.toString(), null);
         } catch (KattyException e) {
@@ -111,12 +113,11 @@ public class TaskManager implements Serializable {
     }
 
     public String getFormattedTaskList() {
-        if (this.tasks.isEmpty()) {
+        if (tasks.isEmpty()) {
             return "";
         }
-
-        List<String> taskStringFormat = IntStream.range(0, this.tasks.size())
-                .mapToObj(i -> String.format("Task %d: %s", i + 1, this.tasks.get(i).toString()))
+        List<String> taskStringFormat = IntStream.range(0, tasks.size())
+                .mapToObj(i -> String.format("Task %d: %s", i + 1, tasks.get(i).toString()))
                 .toList();
 
         return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";

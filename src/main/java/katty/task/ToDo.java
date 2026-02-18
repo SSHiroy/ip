@@ -1,5 +1,7 @@
 package katty.task;
 
+import java.time.LocalDateTime;
+
 /**
  * Represents a simple to-do {@link Task}.
  * <p>
@@ -9,6 +11,11 @@ package katty.task;
 public class ToDo extends Task {
     public ToDo(String taskName) {
         super(taskName);
+    }
+
+    @Override
+    public LocalDateTime getSortDate() {
+        return LocalDateTime.MIN;
     }
 
     @Override
