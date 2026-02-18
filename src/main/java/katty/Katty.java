@@ -146,6 +146,23 @@ public class Katty {
                     Katty.KattyExpression.HAPPY));
         }
 
+        case "listByName" -> {
+            response.append(kattyMessage(new String[]{"Let me recall try to recall!", "",
+                "If I remember correctly..."}, KattyExpression.THINKING));
+
+            String tasks = taskManager.getListByName();
+
+            if (tasks.isBlank()) {
+                response.append(Katty.kattyMessage(new String[]{"Nothing to do!", "", ""},
+                        KattyExpression.NORMAL));
+            } else {
+                response.append(tasks);
+            }
+
+            response.append(Katty.kattyMessage(new String[]{"Hope that helps!", "", ""},
+                    Katty.KattyExpression.HAPPY));
+        }
+
         case "mark" -> {
             KattyResult result;
             try {

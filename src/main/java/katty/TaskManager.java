@@ -123,6 +123,21 @@ public class TaskManager implements Serializable {
         return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";
     }
 
+    public String getListByName() {
+        if (tasks.isEmpty()) {
+            return "";
+        }
+        List<Task> sortedByName = tasks.stream()
+                .sorted(Comparator.comparing(Task::getTaskName, String.CASE_INSENSITIVE_ORDER))
+                .toList();
+
+        List<String> taskStringFormat = IntStream.range(0, sortedByName.size())
+                .mapToObj(i -> String.format("Task %d: %s", i + 1, sortedByName.get(i).toString()))
+                .toList();
+
+        return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";
+    }
+
     /**
      * Saves serialized state of tasks {@code TaskManager} in a file.
      *
