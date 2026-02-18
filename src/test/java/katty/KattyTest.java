@@ -13,16 +13,11 @@ public class KattyTest {
             ""
         };
 
-        String expected = "\n" + String.format(
-                """
-                /\\_/\\  | %-35s
-               ( %s ) | %-35s
-                > ^ <  | %-35s""" + "\n",
-                messages[0],
-                "o.o",
-                messages[1],
-                messages[2]
-        ) + "\n";
+        // This matches the new Top-Speech logic:
+        // 1. The Cat's head and the first message
+        // 2. The Cat's chin/feet
+        // (No dividers because messages[1] and [2] are blank)
+        String expected = "\n /\\_/\\\n( o.o )  Hi there! Katty's ready to help!\n > ^ <\n";
 
         assertEquals(
                 expected,

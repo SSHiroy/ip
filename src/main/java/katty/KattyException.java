@@ -1,5 +1,8 @@
 package katty;
 
+import katty.task.Deadline;
+import katty.task.Event;
+
 /**
  * Represents custom exceptions used in Katty,
  * capable of providing messages that are more relevant to the dev.
@@ -12,12 +15,28 @@ public class KattyException extends Exception {
         super(exception);
     }
 
-    public static KattyException noTaskFound() {
-        return new KattyException("The number is not a valid index in the task list.");
+    public static KattyException invalidTodo() {
+        return new KattyException("Format: todo [description]");
     }
 
-    public static KattyException invalidTask() {
-        return new KattyException("The task was not constructed using the correct syntax.");
+    public static KattyException invalidDeadline() {
+        return new KattyException(String.format("Format: deadline [description] /by %s", Deadline.DEADLINE_FORMAT));
+    }
+
+    /**
+     * Creates an exception indicating that an "event" command was entered with an invalid format.
+     * * <p>The message includes the expected usage pattern, dynamically pulling the
+     * required date-time format from the {@code Event} class constants.</p>
+     *
+     * @return A {@code KattyException} containing the correct format for an event task.
+     */
+    public static KattyException invalidEvent() {
+        return new KattyException(String.format("Format: event [description] /from %s /to %s",
+                Event.EVENT_FORMAT, Event.EVENT_FORMAT));
+    }
+
+    public static KattyException noTaskFound() {
+        return new KattyException("The number is not a valid index in the task list.");
     }
 
     public static KattyException invalidCommand() {

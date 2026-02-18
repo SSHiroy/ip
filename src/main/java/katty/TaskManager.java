@@ -33,7 +33,7 @@ public class TaskManager implements Serializable {
      * Parses user command and input for generating the corresponding task.
      *
      * @param command type of task
-     * @param input task details
+     * @param input   task details
      * @return success of operation
      */
     public KattyResult parser(String command, String input) {
@@ -44,7 +44,7 @@ public class TaskManager implements Serializable {
             saveFile();
             return new KattyResult(true, "Got it! This is what's up...", t.toString(), null);
         } catch (KattyException e) {
-            return new KattyResult(false, "That's not right...", "", e);
+            return new KattyResult(false, "I couldn't add that task!", "", e);
         }
     }
 
@@ -64,7 +64,7 @@ public class TaskManager implements Serializable {
                         this.tasks.get(i).toString(), null);
             } else {
                 return new KattyResult(success, "Task is already completed!",
-                                       this.tasks.get(i).toString(), KattyException.invalidCompletion());
+                        this.tasks.get(i).toString(), KattyException.invalidCompletion());
             }
         } catch (IndexOutOfBoundsException e) {
             return new KattyResult(false, "That task doesn't exist!", null, KattyException.noTaskFound());
@@ -120,7 +120,7 @@ public class TaskManager implements Serializable {
                 .mapToObj(i -> String.format("Task %d: %s", i + 1, tasks.get(i).toString()))
                 .toList();
 
-        return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";
+        return String.join("\n", taskStringFormat);
     }
 
     public String getListByName() {
@@ -135,7 +135,7 @@ public class TaskManager implements Serializable {
                 .mapToObj(i -> String.format("Task %d: %s", i + 1, sortedByName.get(i).toString()))
                 .toList();
 
-        return "----------\n" + String.join("\n", taskStringFormat) + "\n-----------";
+        return String.join("\n", taskStringFormat);
     }
 
     /**
@@ -145,7 +145,7 @@ public class TaskManager implements Serializable {
      */
     public KattyResult saveFile() {
         try (FileOutputStream fos = new FileOutputStream("kattySave");
-            ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
             oos.writeObject(this.tasks);
 
@@ -164,11 +164,11 @@ public class TaskManager implements Serializable {
     @SuppressWarnings("unchecked")
     public KattyResult loadFile() {
         try (FileInputStream fis = new FileInputStream("kattySave");
-            ObjectInputStream ois = new ObjectInputStream(fis)) {
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
 
             Object obj = ois.readObject();
             assert obj instanceof List<?>;
-            this.tasks = (List<Task>) obj;
+            this.tasks = new ArrayList<>((List<Task>) obj);
 
         } catch (FileNotFoundException e) {
             return new KattyResult(false, "No save file found!", "", KattyException.noSaveFile());
@@ -185,17 +185,26 @@ public class TaskManager implements Serializable {
     /**
      * Searches the task list for tasks whose names contain the specified keyword.
      *
-     * <p>This method performs a case-sensitive search through all tasks in the
-     * {@code tasks} list. All matching tasks are converted to their string
-     * representations and concatenated with a newline character between each.
-     *
-     * @param keyword the keyword to search for within task names
-     * @return a string containing all matching tasks separated by newlines, or
-     *         "No tasks of that name!" if no matches are found
+     * @param keyword the keyword to search for within task names.
+     * @return A KattyResult containing the matching tasks or an error if none found.
      */
-    public String findTasksByName(String keyword) {
-        return tasks.stream().filter(i -> i.getTaskName().contains(keyword))
-                             .map(Task::toString)
-                             .reduce((a, b) -> a + "\n" + b).orElse("No tasks of that name!");
+    public KattyResult findTasksByName(String keyword) {
+        String lowerKeyword = keyword.toLowerCase();
+
+        List<Task> matchingTasks = tasks.stream()
+                .filter(t -> t.getTaskName().toLowerCase().contains(lowerKeyword))
+                .toList();
+
+        if (matchingTasks.isEmpty()) {
+            return new KattyResult(false, "I couldn't find anything!",
+                    "Try a different keyword?", KattyException.noTaskFound());
+        }
+
+        String formattedMatches = IntStream.range(0, matchingTasks.size())
+                .mapToObj(i -> String.format("%d. %s", i + 1, matchingTasks.get(i).toString()))
+                .reduce((a, b) -> a + "\n" + b)
+                .orElse("");
+
+        return new KattyResult(true, "I found these matches!", formattedMatches, null);
     }
 }

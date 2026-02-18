@@ -10,7 +10,7 @@ public class KattyResult {
     private final boolean success;
     private final String message;
     private final String data;
-    private final KattyException exception;
+    private final Exception exception;
 
     /**
      * A constructor for storing the result.
@@ -20,7 +20,7 @@ public class KattyResult {
      * @param data The data that was relevant to the operation
      * @param exception The relevant exception in the event of failure.
      */
-    public KattyResult(boolean success, String message, String data, KattyException exception) {
+    public KattyResult(boolean success, String message, String data, Exception exception) {
         this.success = success;
         this.message = message != null ? message : "";
         this.data = data != null ? data : "";
@@ -39,7 +39,7 @@ public class KattyResult {
         return data;
     }
 
-    public KattyException getException() {
+    public Exception getException() {
         return exception;
     }
 }

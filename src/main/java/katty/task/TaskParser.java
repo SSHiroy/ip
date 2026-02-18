@@ -17,19 +17,22 @@ public class TaskParser {
      * Parses user commands and inputs.
      *
      * @param command decides how input is processed
-     * @param input user input
+     * @param input   user input
      * @return an object of {@code Task}
      * @throws KattyException if there is an invalid command or input
      */
     public static Task parser(String command, String input) throws KattyException {
         switch (command) {
         case "todo" -> {
+            if (input.isBlank()) {
+                throw KattyException.invalidTodo();
+            }
             return new ToDo(input);
         }
         case "deadline" -> {
             String[] s = input.split(" /by ");
             if (s.length != 2) {
-                throw KattyException.invalidTask();
+                throw KattyException.invalidDeadline();
             }
             try {
                 return new Deadline(s[0], s[1]);
@@ -40,7 +43,7 @@ public class TaskParser {
         case "event" -> {
             String[] s = input.split(" /from | /to ");
             if (s.length != 3) {
-                throw KattyException.invalidTask();
+                throw KattyException.invalidEvent();
             }
             try {
                 return new Event(s[0], s[1], s[2]);
@@ -48,7 +51,7 @@ public class TaskParser {
                 throw KattyException.badDateFormat();
             }
         }
-        default -> throw KattyException.invalidTask();
+        default -> throw KattyException.invalidCommand();
         }
     }
 }
