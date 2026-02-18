@@ -56,6 +56,17 @@ public class TaskParser {
         }
     }
 
+    /**
+     * Reconstructs a {@link Task} object from a formatted string stored in the save file.
+     * <p>
+     * The method expects a pipe-delimited format: {@code Type | Status | Description | Dates}.
+     * It handles ToDos (T), Deadlines (D), and Events (E). If the status is "1",
+     * the task is automatically marked as complete.
+     * </p>
+     *
+     * @param line the raw line read from the save file (e.g., "T | 1 | buy milk")
+     * @return the corresponding {@code Task} object, or {@code null} if the format is invalid
+     */
     public static Task fromFileString(String line) {
         try {
             String[] parts = line.split(" \\| ");
