@@ -1,9 +1,5 @@
 package katty;
 
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.PrintStream;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -22,11 +18,8 @@ import javafx.stage.Stage;
  */
 public class KattyGui extends Application {
 
-    private PipedInputStream pipedIn;
-    private PipedOutputStream pipedOut;
-
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         TextArea outputArea = new TextArea();
         outputArea.setEditable(false);
         outputArea.setFont(Font.font("Monospaced"));
@@ -54,56 +47,31 @@ public class KattyGui extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        System.setOut(new PrintStream(new TextOutputStream(outputArea)));
-        System.setErr(new PrintStream(new TextOutputStream(outputArea)));
-
-        pipedOut = new PipedOutputStream();
-        pipedIn = new PipedInputStream(pipedOut);
-        System.setIn(pipedIn);
+        // Display the initial greeting and load data
+        outputArea.setText(Katty.getInitialGreeting());
 
         sendButton.setOnAction(e -> sendInput(outputArea, inputField));
         inputField.setOnAction(e -> sendInput(outputArea, inputField));
 
-        primaryStage.setOnCloseRequest(e -> {
-            try {
-                pipedIn.close();
-                pipedOut.close();
-            } catch (Exception ignored) {
-                // Stage issue
-            }
-            Platform.exit();
-        });
-
-        Thread cliThread = new Thread(() -> {
-            try {
-                katty.Katty.kattyStart();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            } finally {
-                try {
-                    pipedIn.close();
-                    pipedOut.close();
-                } catch (Exception ignored) {
-                    // Thread issue
-                }
-                Platform.runLater(Platform::exit);
-            }
-        });
-        cliThread.setDaemon(true);
-        cliThread.start();
-
+        primaryStage.setOnCloseRequest(e -> Platform.exit());
         inputField.requestFocus();
     }
 
     private void sendInput(TextArea outputArea, TextField inputField) {
-        try {
-            Platform.runLater(outputArea::clear);
-            String input = inputField.getText() + "\n";
-            pipedOut.write(input.getBytes());
-            pipedOut.flush();
-            inputField.clear();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        String input = inputField.getText().strip();
+        if (input.isEmpty()) {
+            return;
+        }
+
+        String response = Katty.getResponse(input);
+
+        outputArea.appendText("\nUser: " + input + "\n");
+        outputArea.appendText(response + "\n");
+        outputArea.setScrollTop(Double.MAX_VALUE);
+        inputField.clear();
+
+        if (input.equalsIgnoreCase("bye")) {
+            Platform.exit();
         }
     }
 }
