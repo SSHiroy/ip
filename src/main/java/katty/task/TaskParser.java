@@ -1,5 +1,7 @@
 package katty.task;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import katty.KattyException;
@@ -47,6 +49,14 @@ public class TaskParser {
                 throw KattyException.invalidEvent();
             }
             try {
+                LocalDateTime start = LocalDateTime.parse(s[1], DateTimeFormatter.ofPattern(Event.EVENT_FORMAT));
+                LocalDateTime end = LocalDateTime.parse(s[2], DateTimeFormatter.ofPattern(Event.EVENT_FORMAT));
+
+                if (start.isAfter(end)) {
+                    throw new KattyException("Meow! Your event can't end before it starts. "
+                            + "Are you trying to time travel?");
+                }
+
                 return new Event(s[0], s[1], s[2]);
             } catch (DateTimeParseException e) {
                 throw KattyException.badDateFormat();
