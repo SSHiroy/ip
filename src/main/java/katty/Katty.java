@@ -16,6 +16,17 @@ import katty.task.Event;
  */
 public class Katty {
 
+    private static final String LOGO =
+                    """
+                     __   ___        __       ___________   ___________   ___  ___
+                    |/"| /  ")      /""\\     ("     _   ") ("     _   ") |"  \\/"  |
+                    (: |/   /      /    \\     )__/  \\\\__/   )__/  \\\\__/   \\   \\  /
+                    |    __/      /' /\\  \\       \\\\_ /         \\\\_ /       \\\\  \\/
+                    (// _  \\     //  __'  \\      |.  |         |.  |       /   /
+                    |: | \\  \\   /   /  \\\\  \\     \\:  |         \\:  |      /   /
+                    (__|  \\__) (___/    \\___)     \\__|          \\__|     |___/
+                    """;
+
     /**
      * Sets Katty's expression for messages.
      */
@@ -65,19 +76,8 @@ public class Katty {
      * the interaction session.
      */
     public static void kattyStart() {
-        String logo =
-                    """
-                     __   ___        __       ___________   ___________   ___  ___
-                    |/"| /  ")      /""\\     ("     _   ") ("     _   ") |"  \\/"  |
-                    (: |/   /      /    \\     )__/  \\\\__/   )__/  \\\\__/   \\   \\  /
-                    |    __/      /' /\\  \\       \\\\_ /         \\\\_ /       \\\\  \\/
-                    (// _  \\     //  __'  \\      |.  |         |.  |       /   /
-                    |: | \\  \\   /   /  \\\\  \\     \\:  |         \\:  |      /   /
-                    (__|  \\__) (___/    \\___)     \\__|          \\__|     |___/
-                    """;
-
         // Welcome message
-        System.out.println("\n\nWelcome to\n" + logo + "\n");
+        System.out.println("\n\nWelcome to\n" + LOGO + "\n");
 
         // Katty's welcome message
         System.out.println(kattyMessage(new String[]{"Hi there! Katty's ready to help!", "", ""},
