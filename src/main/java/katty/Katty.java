@@ -15,7 +15,8 @@ import katty.task.Event;
  * </p>
  */
 public class Katty {
-
+    private static final TaskManager taskManager = new TaskManager();
+    private static boolean visibleExceptions = false;
     private static final String LOGO =
                     """
                      __   ___        __       ___________   ___________   ___  ___
@@ -84,11 +85,7 @@ public class Katty {
                                         KattyExpression.NORMAL));
 
         Scanner scanner = new Scanner(System.in);
-        TaskManager taskManager = new TaskManager();
-
         KattyResult saveFileFound = taskManager.loadFile();
-
-        boolean visibleExceptions = false;
 
         if (saveFileFound.isSuccess()) {
             System.out.println(kattyMessage(new String[]{"I found a save file!", "", "Data has been restored."},
