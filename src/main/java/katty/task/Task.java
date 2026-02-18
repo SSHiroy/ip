@@ -1,6 +1,5 @@
 package katty.task;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -8,9 +7,9 @@ import java.time.LocalDateTime;
  * <p>
  * This class helps to structure and manage data for a variety of tasks.
  */
-public abstract class Task implements Serializable {
+public abstract class Task {
     private String taskName;
-    private boolean status;
+    private boolean isComplete;
 
     /**
      * Creates a new {@code Task} with the given name.
@@ -21,18 +20,23 @@ public abstract class Task implements Serializable {
      */
     public Task(String taskName) {
         this.taskName = taskName;
-        this.status = false;
+        this.isComplete = false;
     }
 
-    public boolean markDone() {
-        return !this.status && (this.status = true);
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public boolean markComplete() {
+        return !this.isComplete && (this.isComplete = true);
     }
 
     public boolean markIncomplete() {
-        return this.status && !(this.status = false);
+        return this.isComplete && !(this.isComplete = false);
     }
 
     public abstract LocalDateTime getSortDate();
+    public abstract String toFileString();
 
     public String getTaskName() {
         return taskName;
@@ -40,6 +44,6 @@ public abstract class Task implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("[ %s ] ", this.status ? "X" : " ") + this.taskName;
+        return String.format("[ %s ] ", this.isComplete ? "X" : " ") + this.taskName;
     }
 }

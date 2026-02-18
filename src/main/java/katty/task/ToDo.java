@@ -19,6 +19,11 @@ public class ToDo extends Task {
     }
 
     @Override
+    public String toFileString() {
+        return String.format("T | %d | %s", super.isComplete() ? 1 : 0, super.getTaskName());
+    }
+
+    @Override
     public String toString() {
         return String.format("[T] %s", super.toString());
     }

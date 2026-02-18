@@ -22,15 +22,16 @@ public class TaskParser {
      * @throws KattyException if there is an invalid command or input
      */
     public static Task parser(String command, String input) throws KattyException {
+        String safeInput = input.replace("|", "");
         switch (command) {
         case "todo" -> {
-            if (input.isBlank()) {
+            if (safeInput.isBlank()) {
                 throw KattyException.invalidTodo();
             }
-            return new ToDo(input);
+            return new ToDo(safeInput);
         }
         case "deadline" -> {
-            String[] s = input.split(" /by ");
+            String[] s = safeInput.split(" /by ");
             if (s.length != 2) {
                 throw KattyException.invalidDeadline();
             }
@@ -41,7 +42,7 @@ public class TaskParser {
             }
         }
         case "event" -> {
-            String[] s = input.split(" /from | /to ");
+            String[] s = safeInput.split(" /from | /to ");
             if (s.length != 3) {
                 throw KattyException.invalidEvent();
             }
@@ -52,6 +53,29 @@ public class TaskParser {
             }
         }
         default -> throw KattyException.invalidCommand();
+        }
+    }
+
+    public static Task fromFileString(String line) {
+        try {
+            String[] parts = line.split(" \\| ");
+            String type = parts[0];
+            boolean isDone = parts[1].equals("1");
+            String desc = parts[2];
+
+            Task t = switch (type) {
+            case "T" -> new ToDo(desc);
+            case "D" -> new Deadline(desc, parts[3]);
+            case "E" -> new Event(desc, parts[3], parts[4]);
+            default -> null;
+            };
+
+            if (t != null && isDone) {
+                t.markComplete();
+            }
+            return t;
+        } catch (Exception e) {
+            return null;
         }
     }
 }

@@ -37,6 +37,16 @@ public class Event extends Task {
     }
 
     @Override
+    public String toFileString() {
+        // Format: E | status | description | fromDate | toDate
+        return String.format("E | %d | %s | %s | %s",
+                super.isComplete() ? 1 : 0,
+                super.getTaskName(),
+                this.timeFrom.format(dateTimeFormat),
+                this.timeTo.format(dateTimeFormat));
+    }
+
+    @Override
     public String toString() {
         return String.format("[E] %s (from: %s to: %s)", super.toString(),
                 this.timeFrom.format(dateTimeFormat), this.timeTo.format(dateTimeFormat));

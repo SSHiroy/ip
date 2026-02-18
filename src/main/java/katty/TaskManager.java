@@ -1,12 +1,6 @@
 package katty;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,8 +15,7 @@ import katty.task.TaskParser;
  * <p>This class provides a way for Katty to handle the creation,
  * deletion or modification of tasks for the user.</p>
  */
-public class TaskManager implements Serializable {
-    private static final long serialVersionUID = 2L;
+public class TaskManager {
     private List<Task> tasks;
 
     public TaskManager() {
@@ -57,7 +50,7 @@ public class TaskManager implements Serializable {
     public KattyResult markDone(int i) {
         i = i - 1;
         try {
-            boolean success = this.tasks.get(i).markDone();
+            boolean success = this.tasks.get(i).markComplete();
             if (success) {
                 saveFile();
                 return new KattyResult(success, "I've marked it as complete! Nice work!",
@@ -144,16 +137,14 @@ public class TaskManager implements Serializable {
      * @return success of operation
      */
     public KattyResult saveFile() {
-        try (FileOutputStream fos = new FileOutputStream("kattySave");
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-
-            oos.writeObject(this.tasks);
-
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter("kattySave.txt"))) {
+            for (Task t : tasks) {
+                writer.println(t.toFileString());
+            }
+            return new KattyResult(true, "Saved to text file!", "", null);
         } catch (IOException e) {
             return new KattyResult(false, "Save file could not be made!", "", KattyException.failToSave());
         }
-
-        return new KattyResult(true, "", "", null);
     }
 
     /**
@@ -161,25 +152,30 @@ public class TaskManager implements Serializable {
      *
      * @return success of operation
      */
-    @SuppressWarnings("unchecked")
     public KattyResult loadFile() {
-        try (FileInputStream fis = new FileInputStream("kattySave");
-             ObjectInputStream ois = new ObjectInputStream(fis)) {
-
-            Object obj = ois.readObject();
-            assert obj instanceof List<?>;
-            this.tasks = new ArrayList<>((List<Task>) obj);
-
-        } catch (FileNotFoundException e) {
+        java.io.File file = new java.io.File("kattySave.txt");
+        if (!file.exists()) {
             return new KattyResult(false, "No save file found!", "", KattyException.noSaveFile());
-        } catch (IOException e) {
-            return new KattyResult(false, "File could not be read. It might be corrupted!",
-                    "", KattyException.corruptFile());
-        } catch (ClassNotFoundException e) {
-            return new KattyResult(false, "File could not be read. The save file could be a different version!",
-                    "", KattyException.noSaveFile());
         }
-        return new KattyResult(true, "Save file found. Data has been loaded!", this.getFormattedTaskList(), null);
+
+        try (java.util.Scanner sc = new java.util.Scanner(file)) {
+            this.tasks = new ArrayList<>();
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                if (line.isBlank()) {
+                    continue;
+                }
+
+                Task t = TaskParser.fromFileString(line);
+                if (t != null) {
+                    this.tasks.add(t);
+                }
+            }
+            this.tasks.sort(Comparator.comparing(Task::getSortDate));
+            return new KattyResult(true, "Data loaded from text!", this.getFormattedTaskList(), null);
+        } catch (Exception e) {
+            return new KattyResult(false, "File could not be read!", "", KattyException.corruptFile());
+        }
     }
 
     /**
