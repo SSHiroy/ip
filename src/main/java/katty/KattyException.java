@@ -39,6 +39,10 @@ public class KattyException extends Exception {
         return new KattyException("The number is not a valid index in the task list.");
     }
 
+    public static KattyException searchResultEmpty() {
+        return new KattyException("Meow! I couldn't find any tasks matching that keyword.");
+    }
+
     public static KattyException invalidCommand() {
         return new KattyException("Invalid command entered.");
     }

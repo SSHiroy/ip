@@ -187,19 +187,16 @@ public class TaskManager {
     public KattyResult findTasksByName(String keyword) {
         String lowerKeyword = keyword.toLowerCase();
 
-        List<Task> matchingTasks = tasks.stream()
-                .filter(t -> t.getTaskName().toLowerCase().contains(lowerKeyword))
-                .toList();
-
-        if (matchingTasks.isEmpty()) {
-            return new KattyResult(false, "I couldn't find anything!",
-                    "Try a different keyword?", KattyException.noTaskFound());
-        }
-
-        String formattedMatches = IntStream.range(0, matchingTasks.size())
-                .mapToObj(i -> String.format("%d. %s", i + 1, matchingTasks.get(i).toString()))
+        String formattedMatches = IntStream.range(0, tasks.size())
+                .mapToObj(i -> String.format("%d. %s", i + 1, tasks.get(i).toString()))
+                .filter(t -> t.toLowerCase().contains(lowerKeyword))
                 .reduce((a, b) -> a + "\n" + b)
                 .orElse("");
+
+        if (formattedMatches.isEmpty()) {
+            return new KattyResult(false, "I couldn't find anything!",
+                    "Try a different keyword?", KattyException.searchResultEmpty());
+        }
 
         return new KattyResult(true, "I found these matches!", formattedMatches, null);
     }
