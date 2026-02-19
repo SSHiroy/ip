@@ -53,8 +53,7 @@ public class TaskParser {
                 LocalDateTime end = LocalDateTime.parse(s[2], DateTimeFormatter.ofPattern(Event.EVENT_FORMAT));
 
                 if (start.isAfter(end)) {
-                    throw new KattyException("Meow! Your event can't end before it starts. "
-                            + "Are you trying to time travel?");
+                    throw KattyException.invalidTimeRange();
                 }
 
                 return new Event(s[0], s[1], s[2]);

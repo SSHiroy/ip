@@ -15,6 +15,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+/**
+ * Provides the Graphical User Interface for the Katty application.
+ * <p>
+ * This class handles the JavaFX lifecycle, including window initialization,
+ * styling, and the message-passing loop between the user and the {@link Katty} logic.
+ * It uses a chat-style layout with distinct visual styles for user and system messages.
+ */
 public class KattyGui extends Application {
 
     private VBox chatContainer;
