@@ -124,6 +124,7 @@ public class Katty {
         try {
             StringBuilder response = new StringBuilder();
             String[] command = userCommand.split(" ", 2);
+            command[0] = command[0].toLowerCase();
 
             switch (command[0]) {
 
