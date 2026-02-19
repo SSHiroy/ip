@@ -73,4 +73,8 @@ public class KattyException extends Exception {
     public static KattyException badDateFormat() {
         return new KattyException("The date given is either invalid or not in a valid format as dd-MM-yyyy HH:mm.");
     }
+
+    public static KattyException invalidTimeRange() {
+        return new KattyException("Meow! Your event can't end before it starts. Are you trying to time travel?");
+    }
 }
