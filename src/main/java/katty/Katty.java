@@ -208,8 +208,6 @@ public class Katty {
                 }
             }
 
-            case "bye" -> response.append("");
-
             default -> response.append(dispatch(new KattyResult(false, "I'm not sure what to do...",
                     "(Try typing a valid command...)", KattyException.invalidCommand())));
             }
