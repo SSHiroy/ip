@@ -155,7 +155,7 @@ public class Katty {
                 response.append(dispatch(taskManager.parser(command[0], input)));
             }
 
-            case "list", "listByName" -> {
+            case "list", "listbyname" -> {
                 response.append(kattyMessage(new String[]{"Let me recall try to recall!", "",
                     "If I remember correctly..."}, KattyExpression.THINKING));
 
