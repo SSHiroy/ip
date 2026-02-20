@@ -76,7 +76,7 @@ public class TaskParser {
      * @param line the raw line read from the save file (e.g., "T | 1 | buy milk")
      * @return the corresponding {@code Task} object, or {@code null} if the format is invalid
      */
-    public static Task fromFileString(String line) {
+    public static Task fromFileString(String line) throws KattyException {
         try {
             String[] parts = line.split(" \\| ");
             String type = parts[0];
@@ -87,7 +87,7 @@ public class TaskParser {
             case "T" -> new ToDo(desc);
             case "D" -> new Deadline(desc, parts[3]);
             case "E" -> new Event(desc, parts[3], parts[4]);
-            default -> null;
+            default -> throw KattyException.corruptFile();
             };
 
             if (t != null && isDone) {
@@ -95,7 +95,7 @@ public class TaskParser {
             }
             return t;
         } catch (Exception e) {
-            return null;
+            throw KattyException.corruptFile();
         }
     }
 }

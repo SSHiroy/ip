@@ -108,14 +108,25 @@ public class Katty {
         sb.append(kattyMessage(new String[]{"Hi there! Katty's ready to help!", "", ""},
                 KattyExpression.NORMAL));
 
-        KattyResult saveFileFound = taskManager.loadFile();
+        KattyResult loadResult = taskManager.loadFile();
 
-        if (saveFileFound.isSuccess()) {
-            sb.append(kattyMessage(new String[]{"I found a save file!", "", "Data has been restored."},
-                    KattyExpression.HAPPY));
+        if (loadResult.isSuccess()) {
+            if (loadResult.getException() != null) {
+                sb.append(kattyMessage(new String[]{
+                    "I found your tasks but skipped over some messy parts...",
+                    loadResult.getException().getMessage(),
+                    "Close the app now if you want to fix the file manually!"
+                }, KattyExpression.CONFUSED));
+            } else {
+                sb.append(kattyMessage(new String[]{"I found a save file!", "", "Data has been restored."},
+                        KattyExpression.HAPPY));
+            }
         } else {
-            sb.append(kattyMessage(new String[]{"No save file found!", saveFileFound.getMessage(), ""},
-                    KattyExpression.NORMAL));
+            sb.append(kattyMessage(new String[]{
+                "Meow! I couldn't load your tasks.",
+                loadResult.getMessage(),
+                "I'll start a fresh list for you!"
+            }, KattyExpression.CONFUSED));
         }
         return sb.toString();
     }

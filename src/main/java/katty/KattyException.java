@@ -74,6 +74,23 @@ public class KattyException extends Exception {
         return new KattyException("Save file is corrupted.");
     }
 
+    /**
+     * Creates an exception indicating that the save file was partially readable.
+     * <p>
+     * This occurs when the loader encounters malformed lines and
+     * skips them to recover the remaining valid tasks. It includes a warning that
+     * any subsequent state-changing command (add, delete, mark) will trigger an
+     * automatic save, effectively overwriting the file and permanently removing
+     * the corrupted data.
+     * </p>
+     *
+     * @return A {@code KattyException} with a data-loss warning.
+     */
+    public static KattyException partialLoadSaveFile() {
+        return new KattyException("Found some hairballs in your file and skipped them! "
+                + "Note: Updating your list now will 'groom' the file, permanently deleting the garbled data.");
+    }
+
     public static KattyException badDateFormat() {
         return new KattyException("The date given is either invalid or not in a valid format as dd-MM-yyyy HH:mm.");
     }

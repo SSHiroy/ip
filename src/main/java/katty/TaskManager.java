@@ -148,9 +148,16 @@ public class TaskManager {
     }
 
     /**
-     * Loads state of tasks {@code TaskManager} from a file.
+     * Loads the state of tasks into the {@code TaskManager} from the local save file.
+     * <p>
+     * This method attempts to read {@code kattySave.txt}. It processes the file line-by-line,
+     * utilizing {@link TaskParser#fromFileString(String)} to reconstruct task objects.
+     * If a line is malformed or corrupted, it is skipped to ensure maximum data recovery,
+     * and a flag is set to notify the user of the partial load.
+     * </p>
      *
-     * @return success of operation
+     * @return A {@link KattyResult} indicating if the load was successful, partially
+     *      successful (with corruption), or failed entirely.
      */
     public KattyResult loadFile() {
         java.io.File file = new java.io.File("kattySave.txt");
@@ -159,22 +166,38 @@ public class TaskManager {
         }
 
         try (java.util.Scanner sc = new java.util.Scanner(file)) {
-            this.tasks = new ArrayList<>();
+            tasks = new ArrayList<>();
+            boolean hasCorruption = false;
+
             while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                if (line.isBlank()) {
+                String line = sc.nextLine().trim();
+                if (line.isEmpty()) {
                     continue;
                 }
 
-                Task t = TaskParser.fromFileString(line);
-                if (t != null) {
-                    this.tasks.add(t);
+                try {
+                    Task t = TaskParser.fromFileString(line);
+                    if (t != null) {
+                        tasks.add(t);
+                    }
+                } catch (Exception e) {
+                    hasCorruption = true;
                 }
             }
-            this.tasks.sort(Comparator.comparing(Task::getSortDate));
-            return new KattyResult(true, "Data loaded from text!", this.getFormattedTaskList(), null);
+
+            tasks.sort(Comparator.comparing(Task::getSortDate));
+
+            if (hasCorruption) {
+                return new KattyResult(true,
+                        "Meow! I recovered your tasks, but some corrupted lines were skipped.",
+                        getFormattedTaskList(), KattyException.partialLoadSaveFile());
+            }
+
+            return new KattyResult(true, "Data loaded successfully!", getFormattedTaskList(), null);
+
         } catch (Exception e) {
-            return new KattyResult(false, "File could not be read!", "", KattyException.corruptFile());
+            return new KattyResult(false, "Critical error: The save file could not be read!",
+                    "", KattyException.corruptFile());
         }
     }
 
