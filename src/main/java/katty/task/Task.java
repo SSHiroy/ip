@@ -28,11 +28,11 @@ public abstract class Task {
     }
 
     public boolean markComplete() {
-        return !this.isComplete && (this.isComplete = true);
+        return !isComplete && (isComplete = true);
     }
 
     public boolean markIncomplete() {
-        return this.isComplete && !(this.isComplete = false);
+        return isComplete && !(isComplete = false);
     }
 
     public abstract LocalDateTime getSortDate();
@@ -44,6 +44,6 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return String.format("[%s] ", this.isComplete ? "X" : " ") + this.taskName;
+        return String.format("[%s] ", isComplete ? "X" : " ") + taskName;
     }
 }

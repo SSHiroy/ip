@@ -50,14 +50,14 @@ public class TaskManager {
     public KattyResult markDone(int i) {
         i = i - 1;
         try {
-            boolean success = this.tasks.get(i).markComplete();
+            boolean success = tasks.get(i).markComplete();
             if (success) {
                 saveFile();
                 return new KattyResult(success, "I've marked it as complete! Nice work!",
-                        this.tasks.get(i).toString(), null);
+                        tasks.get(i).toString(), null);
             } else {
                 return new KattyResult(success, "Task is already completed!",
-                        this.tasks.get(i).toString(), KattyException.invalidCompletion());
+                        tasks.get(i).toString(), KattyException.invalidCompletion());
             }
         } catch (IndexOutOfBoundsException e) {
             return new KattyResult(false, "That task doesn't exist!", null, KattyException.noTaskFound());
@@ -73,15 +73,15 @@ public class TaskManager {
     public KattyResult markIncomplete(int i) {
         i = i - 1;
         try {
-            boolean success = this.tasks.get(i).markIncomplete();
+            boolean success = tasks.get(i).markIncomplete();
             saveFile();
             if (success) {
                 return new KattyResult(success,
                         "I've marked it as incomplete. Let's hope it doesn't stay that way for long...",
-                        this.tasks.get(i).toString(), null);
+                        tasks.get(i).toString(), null);
             } else {
                 return new KattyResult(success, "Task was never completed!",
-                        this.tasks.get(i).toString(), KattyException.invalidCompletion());
+                        tasks.get(i).toString(), KattyException.invalidCompletion());
             }
         } catch (IndexOutOfBoundsException e) {
             return new KattyResult(false, "That task doesn't exist!", null, KattyException.noTaskFound());
@@ -97,7 +97,7 @@ public class TaskManager {
     public KattyResult deleteTask(int i) {
         i = i - 1;
         try {
-            Task task = this.tasks.remove(i);
+            Task task = tasks.remove(i);
             saveFile();
             return new KattyResult(true, "", task.toString(), null);
         } catch (IndexOutOfBoundsException e) {
